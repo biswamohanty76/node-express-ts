@@ -27,6 +27,12 @@ export class PaymentRoutes {
 
         });
 
+        app.get('/checkout/error', (req: Request, res: Response) => {
+
+            res.sendFile(join(__dirname, '../public/error.html'));
+
+        });
+
         app.get('/checkout', (req: Request, res: Response) => {
             console.log("in client_token")
             this.gateway.clientToken.generate({}).then(response => {
@@ -46,8 +52,13 @@ export class PaymentRoutes {
             }).then(brainTreeResponse => {
                 console.log(brainTreeResponse);
                 console.log(brainTreeResponse.success == true);
+                if(brainTreeResponse.success == true){
+                    res.send({ redirect: 'http://localhost:5000/checkout/success' });
+                }else{
+                    res.send({ redirect: 'http://localhost:5000/checkout/error' })
+                }
             });
-            res.send({ redirect: 'http://localhost:5000/checkout/success' });
+           
         });
     }
 }
