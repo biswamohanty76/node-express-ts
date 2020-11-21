@@ -27,7 +27,7 @@ class App {
         //support application/x-www-form-urlencoded post data
         this.app.use(bodyParser.urlencoded({ extended: false }));
        this.app.use('/api',helloRouter);
-       //this.app.use('/api',paymentRouter.route(this.app));
+      // this.app.use('/api',paymentRouter.route(this.app));
     }
 
 }

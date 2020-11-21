@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Checkout</title>
+</head>
+
+<body>
+  <div id="dropin-container"></div>
+  <button id="submit-button">Purchase</button>
+
+  <script src="https://js.braintreegateway.com/web/dropin/1.25.0/js/dropin.min.js"></script>
+
+  <script>
+    var submitButton = document.querySelector('#submit-button');
+
+    braintree.dropin.create({
+      authorization: 'sandbox_384pc2rh_rkrz65z2vyrd3gzf',
+      selector: '#dropin-container'
+    }, function (err, dropinInstance) {
+      if (err) {
+        // Handle any errors that might've occurred when creating Drop-in
+        console.error("eerr" + err);
+
+        return;
+      }
+      submitButton.addEventListener('click', function () {
+        console.log('clicked');
+        this.disabled = true;
+        dropinInstance.requestPaymentMethod(function (err, payload) {
+          if (err) {
+            console.log(err);
+            submitButton.disabled = false;
+            // Handle errors in requesting payment method
+          }
+          
+          console.log(payload);
+          //payload.amount=10;
+          //console.log(payload);
+          
+          let response = fetch('http://localhost:5000/checkout', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+          }).then(response => {
+            return response.json();
+          }).then(response => {
+            console.log(response.redirect);
+            window.location = response.redirect;
+          });
+
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
