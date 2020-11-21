@@ -15,16 +15,27 @@
   <script>
     var submitButton = document.querySelector('#submit-button');
 
-    braintree.dropin.create({
-      authorization: 'sandbox_384pc2rh_rkrz65z2vyrd3gzf',
+    //Get The Client Token From Server
+    let response = fetch('http://localhost:5000/checkout', {
+      method: 'GET',
+    }).then(response => {
+      return response.json();
+    }).then(response => {
+      console.log(response)
+
+      //Use the clien token to initiaze client SDK
+      braintree.dropin.create({
+      authorization: response.token,
       selector: '#dropin-container'
     }, function (err, dropinInstance) {
       if (err) {
         // Handle any errors that might've occurred when creating Drop-in
         console.error("eerr" + err);
-
         return;
       }
+      
+      //On click of card detail, send details to braintree server. 
+      //The BrainTree Server will respond with nonce which we will use in our server.
       submitButton.addEventListener('click', function () {
         console.log('clicked');
         this.disabled = true;
@@ -34,11 +45,9 @@
             submitButton.disabled = false;
             // Handle errors in requesting payment method
           }
-          
+
           console.log(payload);
-          //payload.amount=10;
-          //console.log(payload);
-          
+          //Send BrainTree Nonce to our server to complete the transaction.
           let response = fetch('http://localhost:5000/checkout', {
             method: 'POST',
             body: JSON.stringify(payload),
@@ -54,6 +63,8 @@
 
         });
       });
+    });
+
     });
   </script>
 </body>

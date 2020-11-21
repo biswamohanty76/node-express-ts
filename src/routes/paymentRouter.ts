@@ -27,13 +27,11 @@ export class PaymentRoutes {
 
         });
 
-        app.get('/client_token', (req: Request, res: Response) => {
-            //console.log(req.body.environment,req.body.merchantId,req.body.privateKey,req.body.publicKey);
-            //this.payment_controller.initializePayment(req, res);
+        app.get('/checkout', (req: Request, res: Response) => {
+            console.log("in client_token")
             this.gateway.clientToken.generate({}).then(response => {
-                res.send(response.clientToken);
+                res.send({token:response.clientToken});
             });
-
         });
 
         app.post("/checkout", (req: Request, res: Response) => {
