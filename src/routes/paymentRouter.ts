@@ -39,17 +39,17 @@ export class PaymentRoutes {
         app.post("/checkout", (req: Request, res: Response) => {
             var nonceFromTheClient: string = req.body.nonce;
             console.log(req.body)
-            //    this.gateway.transaction.sale({
-            //     amount: "10.00",
-            //     paymentMethodNonce: nonceFromTheClient,
-            //     options: {
-            //     submitForSettlement: true
-            //     }
-            //     }).then(brainTreeResponse=>{
-            //     console.log(brainTreeResponse);
-            //     console.log(brainTreeResponse.success==true);
-            //     });
-            res.send({redirect:'http://localhost:5000/checkout/success'});
+            this.gateway.transaction.sale({
+                amount: "20.00",
+                paymentMethodNonce: nonceFromTheClient,
+                options: {
+                    submitForSettlement: true
+                }
+            }).then(brainTreeResponse => {
+                console.log(brainTreeResponse);
+                console.log(brainTreeResponse.success == true);
+            });
+            res.send({ redirect: 'http://localhost:5000/checkout/success' });
         });
     }
 }
