@@ -23,7 +23,7 @@
     }).then(response => {
       console.log(response)
 
-      //Use the clien token to initiaze client SDK
+      //Use the client token obained from our server to initiaze client SDK.
       braintree.dropin.create({
       authorization: response.token,
       selector: '#dropin-container'
@@ -34,8 +34,7 @@
         return;
       }
       
-      //On click of card detail, send details to braintree server. 
-      //The BrainTree Server will respond with nonce which we will use in our server.
+      //Clicking on submit/purchase button after entering card details we will get the nonce form the braintree server.
       submitButton.addEventListener('click', function () {
         console.log('clicked');
         this.disabled = true;
